@@ -1,16 +1,42 @@
+import { useNavigate } from "react-router-dom";
+
 function Login() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/dashboard");
+  };
+
   return (
-    <div>
-      <h1>TDC Matchmaker CRM</h1>
-      <h2>Login Page</h2>
+    <div className="login-container">
 
-      <input type="email" placeholder="Enter Email" />
-      <br /><br />
+      <div className="login-card">
 
-      <input type="password" placeholder="Enter Password" />
-      <br /><br />
+        <h1>TDC Matchmaker CRM</h1>
 
-      <button>Login</button>
+        <h2>Welcome Back</h2>
+
+        <input
+          className="login-input"
+          type="email"
+          placeholder="Enter Email"
+        />
+
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Enter Password"
+        />
+
+        <button
+          className="login-button"
+          onClick={handleLogin}
+        >
+          Login
+        </button>
+
+      </div>
+
     </div>
   );
 }

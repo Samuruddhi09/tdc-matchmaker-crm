@@ -10,6 +10,7 @@ function CustomerCard({ customer }) {
       <p>{customer.city}</p>
       <p>{customer.designation}</p>
       <p>{customer.company}</p>
+      <p>Status: {customer.status}</p>
 
       <Link to={`/customer/${customer.id}`}>
         <button>View Profile</button>

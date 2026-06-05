@@ -1,51 +1,250 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f5f7fb;
+  background: #f8fafc;
 }
+
+#root {
+  width: 100%;
+}
+
+/* HEADINGS */
 
 h1 {
   text-align: center;
   padding: 20px;
-  color: #1f2937;
+  color: #0f172a;
 }
+
+h2,
+h3 {
+  color: #0f172a;
+}
+
+/* DASHBOARD STATS */
 
 .dashboard-cards {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .card {
   background: white;
   padding: 20px;
-  width: 220px;
-  border-radius: 12px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
-  text-align: center;
+  border-radius: 16px;
+  width: 250px;
+  min-height: 140px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 }
 
 .card h2 {
-  color: #111827;
   margin: 0;
   font-size: 36px;
 }
 
 .card p {
-  color: #6b7280;
-  font-size: 18px;
+  color: #64748b;
+  font-size: 16px;
 }
 
+/* BUTTONS */
+
 button {
-  background: #111827;
+  background: #4f46e5;
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
-  background: #374151;
+  background: #4338ca;
+}
+
+/* LOGIN */
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.login-card {
+  background: white;
+  width: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.login-card h1 {
+  color: #4f46e5;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: white;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 2px 0 15px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+  color: #4f46e5;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #334155;
+}
+
+.sidebar p {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: 0.2s;
+}
+
+.sidebar p:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+/* CUSTOMER TABLE */
+
+.customer-table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+.customer-table th {
+  background: #f8fafc;
+  font-weight: bold;
+  color: #334155;
+}
+
+.customer-table th,
+.customer-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.customer-table tr:hover {
+  background: #f8fafc;
+}
+
+/* CUSTOMER DETAIL */
+
+.customer-detail-card {
+  width: 700px;
+  max-width: 90%;
+  margin: 30px auto;
+  padding: 30px;
+  text-align: left;
+}
+
+.customer-detail-card p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* MATCHES */
+
+.matches-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.match-card {
+  width: 700px;
+  max-width: 90%;
+  margin: 20px auto;
+  padding: 25px;
+  text-align: left;
+}
+
+/* STATUS BADGES */
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Actively Matching */
+.status-badge.actively-matching {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* Verified */
+.status-badge.verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* New Lead */
+.status-badge.new-lead {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* Meeting Scheduled */
+.status-badge.meeting-scheduled {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+/* Relationship Progressing */
+.status-badge.relationship-progressing {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+/* Match Sent */
+.status-badge.match-sent {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* Success Story */
+.status-badge.success-story {
+  background: #bbf7d0;
+  color: #166534;
+}
+
+/* Profile Complete */
+.status-badge.profile-complete {
+  background: #e2e8f0;
+  color: #475569;
 }

@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import customers from "../data/customers";
+import Navbar from "../components/Navbar";
 
 function CustomerDetail() {
   const { id } = useParams();
@@ -13,69 +15,88 @@ function CustomerDetail() {
   }
 
   return (
-    <div>
-      <h1>Customer Profile</h1>
+    <>
+      <Navbar />
 
-      <div className="card">
+      <div
+        style={{
+          marginLeft: "240px",
+          padding: "20px",
+        }}
+      >
+        <h1>Customer Profile</h1>
 
-        <h2>
-          {customer.firstName} {customer.lastName}
-        </h2>
+        <div className="card customer-detail-card">
+          <h2>
+            {customer.firstName} {customer.lastName}
+          </h2>
 
-        <p><strong>Gender:</strong> {customer.gender}</p>
+          <p>
+            <strong>Gender:</strong>{" "}
+            {customer.gender}
+          </p>
 
-        <p><strong>Date of Birth:</strong> {customer.dob}</p>
+          <p>
+            <strong>Age:</strong>{" "}
+            {customer.age}
+          </p>
 
-        <p><strong>Country:</strong> {customer.country}</p>
+          <p>
+            <strong>City:</strong>{" "}
+            {customer.city}
+          </p>
 
-        <p><strong>City:</strong> {customer.city}</p>
+          <p>
+            <strong>Religion:</strong>{" "}
+            {customer.religion}
+          </p>
 
-        <p><strong>Height:</strong> {customer.height}</p>
+          <p>
+            <strong>Profession:</strong>{" "}
+            {customer.profession}
+          </p>
 
-        <p><strong>Email:</strong> {customer.email}</p>
+          <p>
+            <strong>Status:</strong>{" "}
+            <span className="status-badge">
+              {customer.journeyStatus}
+            </span>
+          </p>
 
-        <p><strong>Phone:</strong> {customer.phone}</p>
+          <p>
+            <strong>Income:</strong> ₹
+            {customer.income} LPA
+          </p>
 
-        <p><strong>College:</strong> {customer.college}</p>
+          <p>
+            <strong>Height:</strong>{" "}
+            {customer.height} inches
+          </p>
 
-        <p><strong>Degree:</strong> {customer.degree}</p>
+          <p>
+            <strong>Want Kids:</strong>{" "}
+            {customer.wantKids}
+          </p>
 
-        <p><strong>Income:</strong> {customer.income}</p>
+          <p>
+            <strong>Open To Relocate:</strong>{" "}
+            {customer.relocate}
+          </p>
 
-        <p><strong>Company:</strong> {customer.company}</p>
+          <h3>Matchmaker Notes</h3>
 
-        <p><strong>Designation:</strong> {customer.designation}</p>
+          <p>{customer.notes}</p>
 
-        <p>
-          <strong>Marital Status:</strong>{" "}
-          {customer.maritalStatus}
-        </p>
+          <br />
 
-        <p>
-          <strong>Languages:</strong>{" "}
-          {customer.languages.join(", ")}
-        </p>
-
-        <p><strong>Siblings:</strong> {customer.siblings}</p>
-
-        <p><strong>Religion:</strong> {customer.religion}</p>
-
-        <p><strong>Caste:</strong> {customer.caste}</p>
-
-        <p><strong>Want Kids:</strong> {customer.wantKids}</p>
-
-        <p>
-          <strong>Open To Relocate:</strong>{" "}
-          {customer.relocate}
-        </p>
-
-        <p>
-          <strong>Open To Pets:</strong>{" "}
-          {customer.pets}
-        </p>
-
+          <Link to="/matches">
+            <button>
+              View Recommended Matches
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
