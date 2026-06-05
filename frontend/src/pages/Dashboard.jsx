@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import customers from "../data/customers";
 import Navbar from "../components/Navbar";
+import API from "../services/api";
 
 function Dashboard() {
+  const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await API.get("/customers");
+      setCustomers(response.data);
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+    }
+  };
 
   const totalCustomers = customers.length;
 
@@ -78,12 +92,9 @@ function Dashboard() {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Gender</th>
-              <th>Age</th>
               <th>City</th>
               <th>Profession</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
 
@@ -97,38 +108,15 @@ function Dashboard() {
               .map((customer) => (
                 <tr key={customer.id}>
                   <td>
-                    {customer.firstName}{" "}
-                    {customer.lastName}
+                    {customer.firstName} {customer.lastName}
                   </td>
-
-                  <td>{customer.gender}</td>
-
-                  <td>{customer.age}</td>
 
                   <td>{customer.city}</td>
 
                   <td>{customer.profession}</td>
 
                   <td>
-                    <span
-                      className={`status-badge ${
-                        customer.journeyStatus
-                          .toLowerCase()
-                          .replaceAll(" ", "-")
-                      }`}
-                    >
-                      {customer.journeyStatus}
-                    </span>
-                  </td>
-
-                  <td>
-                    <Link
-                      to={`/customer/${customer.id}`}
-                    >
-                      <button>
-                        View
-                      </button>
-                    </Link>
+                    {customer.journeyStatus}
                   </td>
                 </tr>
               ))}
