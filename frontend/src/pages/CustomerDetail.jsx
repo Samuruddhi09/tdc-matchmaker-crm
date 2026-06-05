@@ -1,17 +1,38 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import customers from "../data/customers";
+import { useState, useEffect } from "react";
+
 import Navbar from "../components/Navbar";
+import API from "../services/api";
 
 function CustomerDetail() {
   const { id } = useParams();
 
-  const customer = customers.find(
-    (c) => c.id === Number(id)
-  );
+  const [customer, setCustomer] =
+    useState(null);
+
+  useEffect(() => {
+    fetchCustomer();
+  }, []);
+
+  const fetchCustomer = async () => {
+    try {
+      const response =
+        await API.get(
+          `/customers/${id}`
+        );
+
+      setCustomer(response.data);
+    } catch (error) {
+      console.error(
+        "Error fetching customer:",
+        error
+      );
+    }
+  };
 
   if (!customer) {
-    return <h2>Customer Not Found</h2>;
+    return <h2>Loading...</h2>;
   }
 
   return (
@@ -27,8 +48,10 @@ function CustomerDetail() {
         <h1>Customer Profile</h1>
 
         <div className="card customer-detail-card">
+
           <h2>
-            {customer.firstName} {customer.lastName}
+            {customer.firstName}{" "}
+            {customer.lastName}
           </h2>
 
           <p>
@@ -83,7 +106,9 @@ function CustomerDetail() {
             {customer.relocate}
           </p>
 
-          <h3>Matchmaker Notes</h3>
+          <h3>
+            Matchmaker Notes
+          </h3>
 
           <p>{customer.notes}</p>
 
@@ -94,6 +119,7 @@ function CustomerDetail() {
               View Recommended Matches
             </button>
           </Link>
+
         </div>
       </div>
     </>
