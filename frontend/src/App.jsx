@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import CustomerDetail from "./pages/CustomerDetail";
 import Matches from "./pages/Matches";
 
+
 function App() {
   return (
     <Routes>
@@ -12,6 +13,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/customer/:id" element={<CustomerDetail />} />
       <Route path="/matches" element={<Matches />} />
+      
     </Routes>
   );
 }

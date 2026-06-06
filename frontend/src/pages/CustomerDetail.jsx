@@ -70,13 +70,70 @@ function CustomerDetail() {
           </p>
 
           <p>
+            <strong>Date of Birth:</strong>{" "}
+            {customer.dob}
+          </p>
+
+          <p>
+            <strong>Country:</strong>{" "}
+            {customer.country}
+          </p>
+
+          <p>
+            <strong>Email:</strong>{" "}
+            {customer.email}
+          </p>
+
+          <p>
+            <strong>Phone:</strong>{" "}
+            {customer.phone}
+          </p>
+          <p>
             <strong>Religion:</strong>{" "}
             {customer.religion}
+          </p>
+          <p>
+            <strong>Caste:</strong>{" "}
+            {customer.caste}
+          </p>
+
+          <p>
+            <strong>Marital Status:</strong>{" "}
+            {customer.maritalStatus}
+          </p>
+
+          <p>
+            <strong>Siblings:</strong>{" "}
+            {customer.siblings}
+          </p>
+
+          <p>
+            <strong>Languages:</strong>{" "}
+            {customer.languages?.join(", ")}
           </p>
 
           <p>
             <strong>Profession:</strong>{" "}
             {customer.profession}
+          </p>
+          <p>
+            <strong>Company:</strong>{" "}
+            {customer.company}
+          </p>
+
+          <p>
+            <strong>Designation:</strong>{" "}
+            {customer.designation}
+          </p>
+
+          <p>
+            <strong>College:</strong>{" "}
+            {customer.college}
+          </p>
+
+          <p>
+            <strong>Degree:</strong>{" "}
+            {customer.degree}
           </p>
 
           <p>
@@ -104,6 +161,10 @@ function CustomerDetail() {
           <p>
             <strong>Open To Relocate:</strong>{" "}
             {customer.relocate}
+          </p>
+          <p>
+            <strong>Open To Pets:</strong>{" "}
+            {customer.pets}
           </p>
 
           <h3>

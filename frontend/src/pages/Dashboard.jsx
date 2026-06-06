@@ -95,6 +95,7 @@ function Dashboard() {
               <th>City</th>
               <th>Profession</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -117,6 +118,12 @@ function Dashboard() {
 
                   <td>
                     {customer.journeyStatus}
+                  </td>
+
+                  <td>
+                    <Link to={`/customer/${customer.id}`}>
+                      <button>View</button>
+                    </Link>
                   </td>
                 </tr>
               ))}

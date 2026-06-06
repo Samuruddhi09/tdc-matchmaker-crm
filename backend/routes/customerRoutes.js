@@ -23,4 +23,19 @@ router.get("/:id", (req, res) => {
   res.json(customer);
 });
 
+// ADD CUSTOMER
+router.post("/", (req, res) => {
+  const newCustomer = {
+    id: customers.length + 1,
+    ...req.body,
+  };
+
+  customers.push(newCustomer);
+
+  res.status(201).json({
+    message: "Customer added successfully",
+    customer: newCustomer,
+  });
+});
+
 module.exports = router;

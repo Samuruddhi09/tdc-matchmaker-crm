@@ -1,4 +1,4 @@
-const customers = [
+[
   {
     "id": 1,
     "firstName": "Ananya",
@@ -3219,6 +3219,4 @@ const customers = [
     "journeyStatus": "Profile Complete",
     "notes": "Looking for a compatible life partner."
   }
-];
-
-export default customers;
+]
