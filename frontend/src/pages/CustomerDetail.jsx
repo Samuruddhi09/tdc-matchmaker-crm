@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import Navbar from "../components/Navbar";
@@ -8,11 +7,8 @@ import API from "../services/api";
 function CustomerDetail() {
   const { id } = useParams();
 
-  const [customer, setCustomer] =
-    useState(null);
-
-  const [notes, setNotes] =
-    useState("");
+  const [customer, setCustomer] = useState(null);
+  const [notes, setNotes] = useState("");
 
   useEffect(() => {
     fetchCustomer();
@@ -20,18 +16,13 @@ function CustomerDetail() {
 
   const fetchCustomer = async () => {
     try {
-      const response =
-        await API.get(
-          `/customers/${id}`
-        );
-
+      const response = await API.get(`/customers/${id}`);
       setCustomer(response.data);
-      setNotes(response.data.notes);
+
+      const savedNotes = localStorage.getItem(`notes-${response.data.id}`);
+      setNotes(savedNotes || response.data.notes);
     } catch (error) {
-      console.error(
-        "Error fetching customer:",
-        error
-      );
+      console.error("Error fetching customer:", error);
     }
   };
 
@@ -52,34 +43,39 @@ function CustomerDetail() {
         <h1
           style={{
             textAlign: "left",
-            padding: "0 0 20px 0"
+            padding: "0 0 20px 0",
           }}
         >
           Customer Profile Management
         </h1>
 
         <div className="profile-layout">
-
           <div className="profile-left">
-
             <div className="info-card">
               <h3>Personal Information</h3>
 
-            <div
-              style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                background: "#e2e8f0",
-                marginBottom: "20px"
-              }}
-            ></div>
+              <div
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  borderRadius: "50%",
+                  background: "#6366f1",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "32px",
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                }}
+              >
+                {customer.firstName.charAt(0)}
+              </div>
 
               <div className="info-row">
                 <strong>Name</strong>
                 <span>
-                  {customer.firstName}{" "}
-                  {customer.lastName}
+                  {customer.firstName} {customer.lastName}
                 </span>
               </div>
 
@@ -101,6 +97,21 @@ function CustomerDetail() {
               <div className="info-row">
                 <strong>Country</strong>
                 <span>{customer.country}</span>
+              </div>
+
+              <div className="info-row">
+                <strong>DOB</strong>
+                <span>{customer.dob}</span>
+              </div>
+
+              <div className="info-row">
+                <strong>Email</strong>
+                <span>{customer.email}</span>
+              </div>
+
+              <div className="info-row">
+                <strong>Phone</strong>
+                <span>{customer.phone}</span>
               </div>
             </div>
 
@@ -138,9 +149,7 @@ function CustomerDetail() {
 
               <div className="info-row">
                 <strong>Income</strong>
-                <span>
-                  ₹{customer.income} LPA
-                </span>
+                <span>₹{customer.income} LPA</span>
               </div>
             </div>
 
@@ -164,9 +173,7 @@ function CustomerDetail() {
 
               <div className="info-row">
                 <strong>Marital Status</strong>
-                <span>
-                  {customer.maritalStatus}
-                </span>
+                <span>{customer.maritalStatus}</span>
               </div>
             </div>
 
@@ -190,18 +197,35 @@ function CustomerDetail() {
 
               <div className="info-row">
                 <strong>Languages</strong>
-                <span>
-                  {customer.languages?.join(
-                    ", "
-                  )}
-                </span>
+                <span>{customer.languages?.join(", ")}</span>
               </div>
             </div>
-
           </div>
 
           <div className="profile-right">
+            <div className="info-card">
+            <h3>Quick Overview</h3>
 
+            <div className="info-row">
+              <strong>Profession</strong>
+              <span>{customer.profession}</span>
+            </div>
+
+            <div className="info-row">
+              <strong>Income</strong>
+              <span>₹{customer.income} LPA</span>
+            </div>
+
+            <div className="info-row">
+              <strong>City</strong>
+              <span>{customer.city}</span>
+            </div>
+
+            <div className="info-row">
+              <strong>Religion</strong>
+              <span>{customer.religion}</span>
+            </div>
+          </div>
             <div className="info-card">
               <h3>Journey Status</h3>
 
@@ -217,21 +241,20 @@ function CustomerDetail() {
             <div className="info-card">
               <h3>AI Profile Summary</h3>
 
-                <p>
-                  {customer.firstName} is a
-                  highly motivated
-                  {` ${customer.profession}`}
-                  from {customer.city}.
-                </p>
+              <p>
+                {customer.firstName} is a {customer.age}-year-old{" "}
+                {customer.profession} based in {customer.city}.
+              </p>
 
-                <p>
-                  Family-oriented profile
-                  seeking long-term
-                  compatibility and
-                  shared values.
-                </p>
+              <p>
+                Professionally established at {customer.company},
+                with an annual income of ₹{customer.income} LPA.
+              </p>
 
-              
+              <p>
+                Looking for a compatible life partner who shares
+                similar values, family goals and long-term commitment.
+              </p>
             </div>
 
             <div className="info-card">
@@ -239,18 +262,13 @@ function CustomerDetail() {
 
               <textarea
                 value={notes}
-                onChange={(e) =>
-                  setNotes(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setNotes(e.target.value)}
                 rows="6"
                 style={{
                   width: "100%",
                   padding: "10px",
                   borderRadius: "10px",
-                  border:
-                    "1px solid #cbd5e1",
+                  border: "1px solid #cbd5e1",
                 }}
               />
 
@@ -258,30 +276,21 @@ function CustomerDetail() {
               <br />
 
               <button
-                onClick={() =>
-                  alert(
-                    "Notes Saved"
-                  )
-                }
+                onClick={() => {
+                  localStorage.setItem(`notes-${customer.id}`, notes);
+                  alert("Notes Saved");
+                }}
               >
                 Save Notes
               </button>
             </div>
 
-            <Link
-              to={`/matches/${customer.id}`}
-            >
-              <button
-                style={{
-                  width: "100%",
-                }}
-              >
+            <Link to={`/matches/${customer.id}`}>
+              <button style={{ width: "100%" }}>
                 View Recommended Matches
               </button>
             </Link>
-
           </div>
-
         </div>
       </div>
     </>

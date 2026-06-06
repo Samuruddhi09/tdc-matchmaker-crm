@@ -1,29 +1,21 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
-import { useNavigate } from "react-router-dom";
+
 
 function Dashboard() {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [cityFilter, setCityFilter] =
-  useState("");
+  const [cityFilter, setCityFilter] = useState("");
+  const [religionFilter, setReligionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
 
-  const [religionFilter, setReligionFilter] =
-    useState("");
-
-  const [statusFilter, setStatusFilter] =
-    useState("");
-
-  const [genderFilter, setGenderFilter] =
-    useState("");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-
-    const isLoggedIn =
-      localStorage.getItem("isLoggedIn");
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
 
     if (!isLoggedIn) {
       navigate("/");
@@ -31,8 +23,7 @@ function Dashboard() {
     }
 
     fetchCustomers();
-
-  }, []);
+  }, [navigate]);
 
   const fetchCustomers = async () => {
     try {
@@ -56,6 +47,19 @@ function Dashboard() {
   const meetingsScheduled = customers.filter(
     (c) => c.journeyStatus === "Meeting Scheduled"
   ).length;
+
+  const sentMatches = JSON.parse(
+    localStorage.getItem("sentMatches")
+  ) || [];
+
+  const uniqueSentMatches = Array.from(
+    new Map(
+      sentMatches.map((item) => [
+        `${item.customerId}-${item.matchId}`,
+        item,
+      ])
+    ).values()
+  );
 
   return (
     <>
@@ -89,23 +93,21 @@ function Dashboard() {
             <h2>{meetingsScheduled}</h2>
             <p>Meetings Scheduled</p>
           </div>
+
+          <div className="card">
+            <h2>{uniqueSentMatches.length}</h2>
+            <p>Matches Sent</p>
+          </div>
         </div>
 
-        <h2 style={{ marginTop: "30px" }}>
-          Customer Profiles
-        </h2>
+        <h2 style={{ marginTop: "30px" }}>Customer Profiles</h2>
 
         <div className="filter-bar">
-
           <select
             value={cityFilter}
-            onChange={(e) =>
-              setCityFilter(e.target.value)
-            }
+            onChange={(e) => setCityFilter(e.target.value)}
           >
-            <option value="">
-              All Cities
-            </option>
+            <option value="">All Cities</option>
             <option>Pune</option>
             <option>Mumbai</option>
             <option>Delhi</option>
@@ -113,17 +115,16 @@ function Dashboard() {
             <option>Bangalore</option>
             <option>Ahmedabad</option>
             <option>Chennai</option>
+            <option>Nashik</option>
+            <option>Indore</option>
+            <option>Kolkata</option>
           </select>
 
           <select
             value={religionFilter}
-            onChange={(e) =>
-              setReligionFilter(e.target.value)
-            }
+            onChange={(e) => setReligionFilter(e.target.value)}
           >
-            <option value="">
-              All Religions
-            </option>
+            <option value="">All Religions</option>
             <option>Hindu</option>
             <option>Muslim</option>
             <option>Christian</option>
@@ -134,49 +135,44 @@ function Dashboard() {
 
           <select
             value={statusFilter}
-            onChange={(e) =>
-              setStatusFilter(e.target.value)
-            }
+            onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="">
-              All Status
-            </option>
+            <option value="">All Status</option>
             <option>Verified</option>
             <option>New Lead</option>
             <option>Meeting Scheduled</option>
             <option>Actively Matching</option>
             <option>Match Sent</option>
+            <option>Relationship Progressing</option>
+            <option>Success Story</option>
+            <option>Profile Complete</option>
           </select>
 
           <select
             value={genderFilter}
-            onChange={(e) =>
-              setGenderFilter(e.target.value)
-            }
+            onChange={(e) => setGenderFilter(e.target.value)}
           >
-            <option value="">
-              All Gender
-            </option>
+            <option value="">All Gender</option>
             <option>Male</option>
             <option>Female</option>
           </select>
 
           <input
             type="text"
-            placeholder ="Search by name, city, email or ID..."
+            placeholder="Search by name, city, email or ID..."
             value={searchTerm}
-            onChange={(e) =>
-              setSearchTerm(e.target.value)
-            }
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-
         </div>
 
         <table className="customer-table">
           <thead>
             <tr>
               <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
               <th>City</th>
+              <th>Religion</th>
               <th>Profession</th>
               <th>Status</th>
               <th>Action</th>
@@ -186,31 +182,19 @@ function Dashboard() {
           <tbody>
             {customers
               .filter((customer) => {
-
                 const fullName =
-                  `${customer.firstName} ${customer.lastName}`
-                    .toLowerCase();
+                  `${customer.firstName} ${customer.lastName}`.toLowerCase();
 
-                const search =
-                  searchTerm.toLowerCase();
+                const search = searchTerm.toLowerCase();
 
                 const matchesSearch =
                   fullName.includes(search) ||
-
-                  customer.email
-                    ?.toLowerCase()
-                    .includes(search) ||
-
-                  customer.city
-                    ?.toLowerCase()
-                    .includes(search) ||
-
-                  String(customer.id)
-                    .includes(search);
+                  customer.email?.toLowerCase().includes(search) ||
+                  customer.city?.toLowerCase().includes(search) ||
+                  String(customer.id).includes(search);
 
                 const matchesCity =
-                  cityFilter === "" ||
-                  customer.city === cityFilter;
+                  cityFilter === "" || customer.city === cityFilter;
 
                 const matchesReligion =
                   religionFilter === "" ||
@@ -231,17 +215,20 @@ function Dashboard() {
                   matchesStatus &&
                   matchesGender
                 );
-
               })
-              
               .map((customer) => (
                 <tr key={customer.id}>
                   <td>
-                    {customer.firstName}{" "}
-                    {customer.lastName}
+                    {customer.firstName} {customer.lastName}
                   </td>
 
+                  <td>{customer.age}</td>
+
+                  <td>{customer.gender}</td>
+
                   <td>{customer.city}</td>
+
+                  <td>{customer.religion}</td>
 
                   <td>{customer.profession}</td>
 
@@ -256,18 +243,17 @@ function Dashboard() {
                   </td>
 
                   <td>
-                    <Link
-                      to={`/customer/${customer.id}`}
-                    >
-                      <button>
-                        View
-                      </button>
+                    <Link to={`/customer/${customer.id}`}>
+                      <button>View</button>
                     </Link>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+
+      
+
       </div>
     </>
   );

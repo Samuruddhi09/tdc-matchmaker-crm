@@ -4,9 +4,7 @@ function Navbar() {
 
   const handleLogout = () => {
 
-    localStorage.removeItem(
-      "isLoggedIn"
-    );
+    localStorage.removeItem("isLoggedIn");
 
     window.location.href = "/";
   };
@@ -18,6 +16,18 @@ function Navbar() {
 
       <Link to="/dashboard">
         <p>Dashboard</p>
+      </Link>
+
+      <Link to="/sent-matches">
+        <p>Sent Matches</p>
+      </Link>
+
+      <Link to="/journey-pipeline">
+        <p>Journey Pipeline</p>
+      </Link>
+
+      <Link to="/analytics">
+        <p>Analytics</p>
       </Link>
 
       <button

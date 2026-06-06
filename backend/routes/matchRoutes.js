@@ -3,6 +3,11 @@ const router = express.Router();
 
 const customers = require("../data/customers");
 
+const {
+  generateMatchExplanation,
+  generateMatchIntro
+} = require("../utils/aiService");
+
 function getRelocationScore(customer, person) {
   if (customer.relocate === person.relocate) {
     return 20;
@@ -194,15 +199,29 @@ router.get("/:id", (req, res) => {
       // Religion
 
       if (
-        customer.religion ===
-        person.religion
+          customer.religion ===
+          person.religion
         ) {
-        score += 25;
-        reasons.push(
+          score += 25;
+          reasons.push(
             "Shared religious background"
-        );
+          );
         } else {
-        score -= 10;
+          score -= 5;
+      }
+
+      // Caste Compatibility
+
+      if (
+        customer.caste &&
+        person.caste &&
+        customer.caste === person.caste
+      ) {
+        score += 10;
+
+        reasons.push(
+          "Similar cultural background"
+        );
       }
 
       // Profession
@@ -220,6 +239,23 @@ router.get("/:id", (req, res) => {
       ) {
         reasons.push(
           "Professional compatibility"
+        );
+      }
+
+      // Language Compatibility
+
+      const commonLanguages =
+        customer.languages?.filter(
+          (lang) =>
+            person.languages?.includes(lang)
+        ) || [];
+
+      if (commonLanguages.length > 0) {
+
+        score += 10;
+
+        reasons.push(
+          `Shared language: ${commonLanguages[0]}`
         );
       }
 
@@ -276,30 +312,56 @@ router.get("/:id", (req, res) => {
         );
       }
 
+      // Lifestyle Compatibility
+
+      if (
+        customer.pets ===
+        person.pets
+      ) {
+        score += 5;
+
+        reasons.push(
+          "Lifestyle compatibility"
+        );
+      }
+
       // Male specific
 
       if (
         customer.gender === "Male"
         ) {
 
-        if (
-            person.age <
-            customer.age
-        ) {
-            score += 5;
-            reasons.push(
-            "Younger age preference"
-            );
-        }
+        const ageGap =
+          customer.age - person.age;
 
         if (
-            person.income <
-            customer.income
+          ageGap >= 1 &&
+          ageGap <= 5
         ) {
-            score += 5;
-            reasons.push(
-            "Income preference match"
-            );
+          score += 8;
+
+          reasons.push(
+            "Traditional age preference match"
+          );
+        }
+
+        const incomeGap =
+          person.income -
+          customer.income;
+
+        if (
+          incomeGap >= 0
+        ) {
+          score += 8;
+
+          reasons.push(
+            "Strong financial compatibility"
+          );
+        }
+        else if (
+          incomeGap >= -5
+        ) {
+          score += 5;
         }
 
         if (
@@ -367,16 +429,25 @@ router.get("/:id", (req, res) => {
           "Potential compatibility with a few areas requiring discussion.";
       }
 
-      return {
-        ...person,
-        score,
-        reasons,
-        matchLevel,
-        aiInsight
-      };
+      if (score > 100) {
+        score = 100;
+      }
+
+      if (score < 0) {
+        score = 0;
+      }
+
+     return {
+      ...person,
+      score: Math.round(score),
+      reasons,
+      matchLevel,
+      aiInsight
+    };
+
     });
 
-  const sortedMatches =
+    const sortedMatches =
     scoredMatches.sort(
       (a, b) => b.score - a.score
     );
@@ -385,5 +456,77 @@ router.get("/:id", (req, res) => {
     sortedMatches.slice(0, 10)
   );
 });
+
+router.post("/ai-analysis", async (req, res) => {
+
+  try {
+
+    const {
+      customer,
+      match,
+      score,
+      reasons
+    } = req.body;
+
+    const aiAnalysis =
+      await generateMatchExplanation(
+        customer,
+        match,
+        score,
+        reasons
+      );
+
+    res.json({
+      analysis: aiAnalysis
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message:
+        "Failed to generate AI analysis"
+    });
+
+  }
+
+});
+
+router.post(
+  "/generate-intro",
+  async (req, res) => {
+
+    try {
+
+      const {
+        customer,
+        match
+      } = req.body;
+
+      const intro =
+        await generateMatchIntro(
+          customer,
+          match
+        );
+
+      res.json({
+        intro
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        message:
+          "Failed to generate intro"
+      });
+
+    }
+
+  }
+);
+
 
 module.exports = router;
