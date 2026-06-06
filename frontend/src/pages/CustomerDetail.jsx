@@ -11,6 +11,9 @@ function CustomerDetail() {
   const [customer, setCustomer] =
     useState(null);
 
+  const [notes, setNotes] =
+    useState("");
+
   useEffect(() => {
     fetchCustomer();
   }, []);
@@ -23,6 +26,7 @@ function CustomerDetail() {
         );
 
       setCustomer(response.data);
+      setNotes(response.data.notes);
     } catch (error) {
       console.error(
         "Error fetching customer:",
@@ -45,141 +49,238 @@ function CustomerDetail() {
           padding: "20px",
         }}
       >
-        <h1>Customer Profile</h1>
+        <h1
+          style={{
+            textAlign: "left",
+            padding: "0 0 20px 0"
+          }}
+        >
+          Customer Profile Management
+        </h1>
 
-        <div className="card customer-detail-card">
+        <div className="profile-layout">
 
-          <h2>
-            {customer.firstName}{" "}
-            {customer.lastName}
-          </h2>
+          <div className="profile-left">
 
-          <p>
-            <strong>Gender:</strong>{" "}
-            {customer.gender}
-          </p>
+            <div className="info-card">
+              <h3>Personal Information</h3>
 
-          <p>
-            <strong>Age:</strong>{" "}
-            {customer.age}
-          </p>
+            <div
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                background: "#e2e8f0",
+                marginBottom: "20px"
+              }}
+            ></div>
 
-          <p>
-            <strong>City:</strong>{" "}
-            {customer.city}
-          </p>
+              <div className="info-row">
+                <strong>Name</strong>
+                <span>
+                  {customer.firstName}{" "}
+                  {customer.lastName}
+                </span>
+              </div>
 
-          <p>
-            <strong>Date of Birth:</strong>{" "}
-            {customer.dob}
-          </p>
+              <div className="info-row">
+                <strong>Gender</strong>
+                <span>{customer.gender}</span>
+              </div>
 
-          <p>
-            <strong>Country:</strong>{" "}
-            {customer.country}
-          </p>
+              <div className="info-row">
+                <strong>Age</strong>
+                <span>{customer.age}</span>
+              </div>
 
-          <p>
-            <strong>Email:</strong>{" "}
-            {customer.email}
-          </p>
+              <div className="info-row">
+                <strong>City</strong>
+                <span>{customer.city}</span>
+              </div>
 
-          <p>
-            <strong>Phone:</strong>{" "}
-            {customer.phone}
-          </p>
-          <p>
-            <strong>Religion:</strong>{" "}
-            {customer.religion}
-          </p>
-          <p>
-            <strong>Caste:</strong>{" "}
-            {customer.caste}
-          </p>
+              <div className="info-row">
+                <strong>Country</strong>
+                <span>{customer.country}</span>
+              </div>
+            </div>
 
-          <p>
-            <strong>Marital Status:</strong>{" "}
-            {customer.maritalStatus}
-          </p>
+            <div className="info-card">
+              <h3>Education</h3>
 
-          <p>
-            <strong>Siblings:</strong>{" "}
-            {customer.siblings}
-          </p>
+              <div className="info-row">
+                <strong>College</strong>
+                <span>{customer.college}</span>
+              </div>
 
-          <p>
-            <strong>Languages:</strong>{" "}
-            {customer.languages?.join(", ")}
-          </p>
+              <div className="info-row">
+                <strong>Degree</strong>
+                <span>{customer.degree}</span>
+              </div>
+            </div>
 
-          <p>
-            <strong>Profession:</strong>{" "}
-            {customer.profession}
-          </p>
-          <p>
-            <strong>Company:</strong>{" "}
-            {customer.company}
-          </p>
+            <div className="info-card">
+              <h3>Career</h3>
 
-          <p>
-            <strong>Designation:</strong>{" "}
-            {customer.designation}
-          </p>
+              <div className="info-row">
+                <strong>Profession</strong>
+                <span>{customer.profession}</span>
+              </div>
 
-          <p>
-            <strong>College:</strong>{" "}
-            {customer.college}
-          </p>
+              <div className="info-row">
+                <strong>Company</strong>
+                <span>{customer.company}</span>
+              </div>
 
-          <p>
-            <strong>Degree:</strong>{" "}
-            {customer.degree}
-          </p>
+              <div className="info-row">
+                <strong>Designation</strong>
+                <span>{customer.designation}</span>
+              </div>
 
-          <p>
-            <strong>Status:</strong>{" "}
-            <span className="status-badge">
-              {customer.journeyStatus}
-            </span>
-          </p>
+              <div className="info-row">
+                <strong>Income</strong>
+                <span>
+                  ₹{customer.income} LPA
+                </span>
+              </div>
+            </div>
 
-          <p>
-            <strong>Income:</strong> ₹
-            {customer.income} LPA
-          </p>
+            <div className="info-card">
+              <h3>Family</h3>
 
-          <p>
-            <strong>Height:</strong>{" "}
-            {customer.height} inches
-          </p>
+              <div className="info-row">
+                <strong>Religion</strong>
+                <span>{customer.religion}</span>
+              </div>
 
-          <p>
-            <strong>Want Kids:</strong>{" "}
-            {customer.wantKids}
-          </p>
+              <div className="info-row">
+                <strong>Caste</strong>
+                <span>{customer.caste}</span>
+              </div>
 
-          <p>
-            <strong>Open To Relocate:</strong>{" "}
-            {customer.relocate}
-          </p>
-          <p>
-            <strong>Open To Pets:</strong>{" "}
-            {customer.pets}
-          </p>
+              <div className="info-row">
+                <strong>Siblings</strong>
+                <span>{customer.siblings}</span>
+              </div>
 
-          <h3>
-            Matchmaker Notes
-          </h3>
+              <div className="info-row">
+                <strong>Marital Status</strong>
+                <span>
+                  {customer.maritalStatus}
+                </span>
+              </div>
+            </div>
 
-          <p>{customer.notes}</p>
+            <div className="info-card">
+              <h3>Partner Preferences</h3>
 
-          <br />
+              <div className="info-row">
+                <strong>Want Kids</strong>
+                <span>{customer.wantKids}</span>
+              </div>
 
-          <Link to="/matches">
-            <button>
-              View Recommended Matches
-            </button>
-          </Link>
+              <div className="info-row">
+                <strong>Relocate</strong>
+                <span>{customer.relocate}</span>
+              </div>
+
+              <div className="info-row">
+                <strong>Pets</strong>
+                <span>{customer.pets}</span>
+              </div>
+
+              <div className="info-row">
+                <strong>Languages</strong>
+                <span>
+                  {customer.languages?.join(
+                    ", "
+                  )}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="profile-right">
+
+            <div className="info-card">
+              <h3>Journey Status</h3>
+
+              <span
+                className={`status-badge ${customer.journeyStatus
+                  .replace(/\s+/g, "-")
+                  .toLowerCase()}`}
+              >
+                {customer.journeyStatus}
+              </span>
+            </div>
+
+            <div className="info-card">
+              <h3>AI Profile Summary</h3>
+
+                <p>
+                  {customer.firstName} is a
+                  highly motivated
+                  {` ${customer.profession}`}
+                  from {customer.city}.
+                </p>
+
+                <p>
+                  Family-oriented profile
+                  seeking long-term
+                  compatibility and
+                  shared values.
+                </p>
+
+              
+            </div>
+
+            <div className="info-card">
+              <h3>Internal Notes</h3>
+
+              <textarea
+                value={notes}
+                onChange={(e) =>
+                  setNotes(
+                    e.target.value
+                  )
+                }
+                rows="6"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "10px",
+                  border:
+                    "1px solid #cbd5e1",
+                }}
+              />
+
+              <br />
+              <br />
+
+              <button
+                onClick={() =>
+                  alert(
+                    "Notes Saved"
+                  )
+                }
+              >
+                Save Notes
+              </button>
+            </div>
+
+            <Link
+              to={`/matches/${customer.id}`}
+            >
+              <button
+                style={{
+                  width: "100%",
+                }}
+              >
+                View Recommended Matches
+              </button>
+            </Link>
+
+          </div>
 
         </div>
       </div>

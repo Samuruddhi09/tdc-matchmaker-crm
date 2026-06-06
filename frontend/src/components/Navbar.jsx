@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
 
 function Navbar() {
+
+  const handleLogout = () => {
+
+    localStorage.removeItem(
+      "isLoggedIn"
+    );
+
+    window.location.href = "/";
+  };
+
   return (
     <div className="sidebar">
 
@@ -10,11 +20,15 @@ function Navbar() {
         <p>Dashboard</p>
       </Link>
 
-      <Link to="/matches">
-        <p>Matches</p>
-      </Link>
-
-      
+      <button
+        onClick={handleLogout}
+        style={{
+          width: "100%",
+          marginTop: "20px"
+        }}
+      >
+        Logout
+      </button>
 
     </div>
   );

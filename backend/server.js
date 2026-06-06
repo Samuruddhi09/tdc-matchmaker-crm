@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const customerRoutes = require("./routes/customerRoutes");
+const matchRoutes = require("./routes/matchRoutes");
 
 const app = express();
 
@@ -10,8 +11,15 @@ app.use(express.json());
 
 app.use("/api/customers", customerRoutes);
 
+app.use(
+  "/api/matches",
+  matchRoutes
+);
+
 app.get("/", (req, res) => {
-  res.send("TDC Matchmaker CRM Backend Running");
+  res.send(
+    "TDC Matchmaker CRM Backend Running"
+  );
 });
 
 const PORT = 5000;

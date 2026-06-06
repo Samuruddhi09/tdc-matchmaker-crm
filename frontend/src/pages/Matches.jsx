@@ -1,17 +1,61 @@
-import customers from "../data/customers";
-import { getMatches } from "../services/matchingService";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import API from "../services/api";
 
 function Matches() {
-  const customer = customers.find(
-    (c) => c.id === 1
-  );
+  const { id } = useParams();
 
-  const matches = getMatches(
-    customer,
-    customers
-  );
+  const [matches, setMatches] =
+    useState([]);
+
+  const [customer, setCustomer] =
+    useState(null);
+
+  useEffect(() => {
+    fetchCustomer();
+    fetchMatches();
+  }, [id]);
+
+  const fetchCustomer =
+    async () => {
+      try {
+        const response =
+          await API.get(
+            `/customers/${id}`
+          );
+
+        setCustomer(
+          response.data
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+  const fetchMatches =
+    async () => {
+      try {
+        const response =
+          await API.get(
+            `/matches/${id}`
+          );
+
+        setMatches(
+          response.data
+        );
+      } catch (error) {
+        console.error(
+          "Error fetching matches:",
+          error
+        );
+      }
+    };
+
+  if (!customer) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <>
@@ -24,14 +68,15 @@ function Matches() {
         }}
       >
         <div className="matches-container">
+
           <h1>
             Recommended Matches for{" "}
-            {customer.firstName}
+            {customer.firstName}{" "}
+            {customer.lastName}
           </h1>
 
-          {matches
-            .slice(0, 5)
-            .map((match) => (
+          {matches.map(
+            (match) => (
               <div
                 className="card match-card"
                 key={match.id}
@@ -70,6 +115,13 @@ function Matches() {
                   {match.score}%
                 </p>
 
+                <p>
+                  <strong>
+                    Match Level:
+                  </strong>{" "}
+                  {match.matchLevel}
+                </p>
+
                 <h3>
                   Match Reasons
                 </h3>
@@ -88,8 +140,17 @@ function Matches() {
                     )
                   )}
                 </ul>
+
+                <h3>
+                  AI Insight
+                </h3>
+
+                <p>
+                  {match.aiInsight}
+                </p>
               </div>
-            ))}
+            )
+          )}
         </div>
       </div>
     </>

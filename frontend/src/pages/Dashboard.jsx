@@ -2,13 +2,36 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [cityFilter, setCityFilter] =
+  useState("");
+
+  const [religionFilter, setReligionFilter] =
+    useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState("");
+
+  const [genderFilter, setGenderFilter] =
+    useState("");
+    const navigate = useNavigate();
 
   useEffect(() => {
+
+    const isLoggedIn =
+      localStorage.getItem("isLoggedIn");
+
+    if (!isLoggedIn) {
+      navigate("/");
+      return;
+    }
+
     fetchCustomers();
+
   }, []);
 
   const fetchCustomers = async () => {
@@ -44,7 +67,7 @@ function Dashboard() {
           padding: "20px",
         }}
       >
-        <h1>TDC Matchmaker Dashboard</h1>
+        <h1>Matchmaker Dashboard</h1>
 
         <div className="dashboard-cards">
           <div className="card">
@@ -72,21 +95,82 @@ function Dashboard() {
           Customer Profiles
         </h2>
 
-        <input
-          type="text"
-          placeholder="Search customer..."
-          value={searchTerm}
-          onChange={(e) =>
-            setSearchTerm(e.target.value)
-          }
-          style={{
-            padding: "10px",
-            width: "300px",
-            borderRadius: "8px",
-            border: "1px solid #d1d5db",
-            marginBottom: "20px",
-          }}
-        />
+        <div className="filter-bar">
+
+          <select
+            value={cityFilter}
+            onChange={(e) =>
+              setCityFilter(e.target.value)
+            }
+          >
+            <option value="">
+              All Cities
+            </option>
+            <option>Pune</option>
+            <option>Mumbai</option>
+            <option>Delhi</option>
+            <option>Hyderabad</option>
+            <option>Bangalore</option>
+            <option>Ahmedabad</option>
+            <option>Chennai</option>
+          </select>
+
+          <select
+            value={religionFilter}
+            onChange={(e) =>
+              setReligionFilter(e.target.value)
+            }
+          >
+            <option value="">
+              All Religions
+            </option>
+            <option>Hindu</option>
+            <option>Muslim</option>
+            <option>Christian</option>
+            <option>Sikh</option>
+            <option>Jain</option>
+            <option>Buddhist</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) =>
+              setStatusFilter(e.target.value)
+            }
+          >
+            <option value="">
+              All Status
+            </option>
+            <option>Verified</option>
+            <option>New Lead</option>
+            <option>Meeting Scheduled</option>
+            <option>Actively Matching</option>
+            <option>Match Sent</option>
+          </select>
+
+          <select
+            value={genderFilter}
+            onChange={(e) =>
+              setGenderFilter(e.target.value)
+            }
+          >
+            <option value="">
+              All Gender
+            </option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder ="Search by name, city, email or ID..."
+            value={searchTerm}
+            onChange={(e) =>
+              setSearchTerm(e.target.value)
+            }
+          />
+
+        </div>
 
         <table className="customer-table">
           <thead>
@@ -101,15 +185,60 @@ function Dashboard() {
 
           <tbody>
             {customers
-              .filter((customer) =>
-                `${customer.firstName} ${customer.lastName}`
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              )
+              .filter((customer) => {
+
+                const fullName =
+                  `${customer.firstName} ${customer.lastName}`
+                    .toLowerCase();
+
+                const search =
+                  searchTerm.toLowerCase();
+
+                const matchesSearch =
+                  fullName.includes(search) ||
+
+                  customer.email
+                    ?.toLowerCase()
+                    .includes(search) ||
+
+                  customer.city
+                    ?.toLowerCase()
+                    .includes(search) ||
+
+                  String(customer.id)
+                    .includes(search);
+
+                const matchesCity =
+                  cityFilter === "" ||
+                  customer.city === cityFilter;
+
+                const matchesReligion =
+                  religionFilter === "" ||
+                  customer.religion === religionFilter;
+
+                const matchesStatus =
+                  statusFilter === "" ||
+                  customer.journeyStatus === statusFilter;
+
+                const matchesGender =
+                  genderFilter === "" ||
+                  customer.gender === genderFilter;
+
+                return (
+                  matchesSearch &&
+                  matchesCity &&
+                  matchesReligion &&
+                  matchesStatus &&
+                  matchesGender
+                );
+
+              })
+              
               .map((customer) => (
                 <tr key={customer.id}>
                   <td>
-                    {customer.firstName} {customer.lastName}
+                    {customer.firstName}{" "}
+                    {customer.lastName}
                   </td>
 
                   <td>{customer.city}</td>
@@ -117,12 +246,22 @@ function Dashboard() {
                   <td>{customer.profession}</td>
 
                   <td>
-                    {customer.journeyStatus}
+                    <span
+                      className={`status-badge ${customer.journeyStatus
+                        .replace(/\s+/g, "-")
+                        .toLowerCase()}`}
+                    >
+                      {customer.journeyStatus}
+                    </span>
                   </td>
 
                   <td>
-                    <Link to={`/customer/${customer.id}`}>
-                      <button>View</button>
+                    <Link
+                      to={`/customer/${customer.id}`}
+                    >
+                      <button>
+                        View
+                      </button>
                     </Link>
                   </td>
                 </tr>

@@ -194,11 +194,11 @@ button:hover {
 /* STATUS BADGES */
 
 .status-badge {
+  display: inline-block;
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
-  display: inline-block;
 }
 
 /* Actively Matching */
@@ -247,4 +247,120 @@ button:hover {
 .status-badge.profile-complete {
   background: #e2e8f0;
   color: #475569;
+}
+
+.profile-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.profile-left {
+  flex: 2;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.info-card {
+  background: white;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+.info-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row strong {
+  color: #334155;
+}
+
+.info-row span {
+  color: #64748b;
+}
+
+.profile-right button {
+  width: 100%;
+}
+
+.profile-right textarea {
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+/* FILTER BAR */
+
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-bar select,
+.filter-bar input {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: white;
+  min-width: 180px;
+  font-size: 14px;
+}
+
+.filter-bar input {
+  min-width: 280px;
+}
+
+/* PROFILE LAYOUT */
+
+.profile-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.profile-left {
+  flex: 2;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.info-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
 }
