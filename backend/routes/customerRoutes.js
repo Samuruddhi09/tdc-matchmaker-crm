@@ -10,14 +10,19 @@ router.get("/", (req, res) => {
 
 // GET CUSTOMER BY ID
 router.get("/:id", (req, res) => {
+
   const customer = customers.find(
-    (c) => c.id === Number(req.params.id)
+    (c) =>
+      c.id === Number(req.params.id)
   );
 
   if (!customer) {
+
     return res.status(404).json({
-      message: "Customer not found",
+      message:
+        "Customer not found"
     });
+
   }
 
   res.json(customer);
@@ -25,17 +30,29 @@ router.get("/:id", (req, res) => {
 
 // ADD CUSTOMER
 router.post("/", (req, res) => {
+
   const newCustomer = {
-    id: customers.length + 1,
-    ...req.body,
+
+    id: Date.now(),
+
+    ...req.body
+
   };
 
-  customers.push(newCustomer);
+  customers.push(
+    newCustomer
+  );
 
   res.status(201).json({
-    message: "Customer added successfully",
-    customer: newCustomer,
+
+    message:
+      "Customer added successfully",
+
+    customer:
+      newCustomer
+
   });
+
 });
 
 module.exports = router;

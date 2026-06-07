@@ -41,12 +41,9 @@ Write a warm compatibility analysis in 2-3 sentences.
 Explain why they are a good match.
 `;
 
-    const result =
-      await model.generateContent(
-        prompt
-      );
+    const result = await model.generateContent(prompt);
 
-    console.log(result.response.text());
+    return result.response.text();
 
   } catch (error) {
 
@@ -108,7 +105,7 @@ Format as a real email.
         prompt
       );
 
-    console.log(result.response.text());
+    return result.response.text();
 
   } catch (error) {
 

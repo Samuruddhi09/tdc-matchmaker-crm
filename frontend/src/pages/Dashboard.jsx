@@ -28,13 +28,43 @@ function Dashboard() {
   }, [navigate]);
 
   const fetchCustomers = async () => {
-    try {
-      const response = await API.get("/customers");
-      setCustomers(response.data);
-    } catch (error) {
-      console.error("Error fetching customers:", error);
-    }
-  };
+  try {
+
+    const response =
+      await API.get("/customers");
+
+    const updatedCustomers =
+      response.data.map(
+        (customer) => {
+
+          const savedStatus =
+            localStorage.getItem(
+              `journeyStatus-${customer.id}`
+            );
+
+          return {
+            ...customer,
+            journeyStatus:
+              savedStatus ||
+              customer.journeyStatus
+          };
+
+        }
+      );
+
+    setCustomers(
+      updatedCustomers
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Error fetching customers:",
+      error
+    );
+
+  }
+};
 
   const totalCustomers = customers.length;
 

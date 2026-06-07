@@ -12,7 +12,7 @@ function Navbar() {
   return (
     <div className="sidebar">
 
-      <h2>TDC CRM</h2>
+      <h2>Matchmaker CRM</h2>
 
       <Link to="/dashboard">
         <p>Dashboard</p>

@@ -448,9 +448,10 @@ router.get("/:id", (req, res) => {
     });
 
     const sortedMatches =
-    scoredMatches.sort(
+    [...scoredMatches].sort(
       (a, b) => b.score - a.score
     );
+
 
   res.json(
     sortedMatches.slice(0, 10)
@@ -465,7 +466,7 @@ router.post("/ai-analysis", async (req, res) => {
       customer,
       match,
       score,
-      reasons
+      reasons = []
     } = req.body;
 
     const aiAnalysis =
@@ -499,6 +500,11 @@ router.post(
 
     try {
 
+      if (!req.body.customer || !req.body.match) {
+        return res.status(400).json({
+          message: "Customer and Match data required"
+        });
+      }
       const {
         customer,
         match

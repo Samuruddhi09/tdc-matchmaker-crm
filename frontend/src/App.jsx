@@ -59,6 +59,11 @@ function App() {
         element={<AddCustomer />}
       />
 
+      <Route
+        path="*"
+        element={<Login />}
+      />
+
     </Routes>
 
 
