@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
+import { motion } from "framer-motion";
 
 
 function Dashboard() {
@@ -11,6 +12,7 @@ function Dashboard() {
   const [religionFilter, setReligionFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
+  
 
   const navigate = useNavigate();
 
@@ -74,30 +76,74 @@ function Dashboard() {
         <h1>Matchmaker Dashboard</h1>
 
         <div className="dashboard-cards">
-          <div className="card">
+
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => navigate("/dashboard")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{totalCustomers}</h2>
             <p>Total Customers</p>
-          </div>
+          </motion.div>
 
-          <div className="card">
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => navigate("/journey-pipeline")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{verifiedProfiles}</h2>
             <p>Verified Profiles</p>
-          </div>
+          </motion.div>
 
-          <div className="card">
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => navigate("/sent-matches")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{activeMatches}</h2>
             <p>Active Matches</p>
-          </div>
+          </motion.div>
 
-          <div className="card">
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => navigate("/meetings")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{meetingsScheduled}</h2>
             <p>Meetings Scheduled</p>
-          </div>
+          </motion.div>
 
-          <div className="card">
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => navigate("/sent-matches")}
+            style={{
+              cursor: "pointer"
+            }}
+          >
             <h2>{uniqueSentMatches.length}</h2>
             <p>Matches Sent</p>
-          </div>
+          </motion.div>
+
         </div>
 
         <h2 style={{ marginTop: "30px" }}>Customer Profiles</h2>

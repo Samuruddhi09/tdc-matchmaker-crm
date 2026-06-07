@@ -30,6 +30,10 @@ function Navbar() {
         <p>Analytics</p>
       </Link>
 
+      <Link to="/meetings">
+        <p>Meetings</p>
+      </Link>
+
       <button
         onClick={handleLogout}
         style={{

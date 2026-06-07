@@ -8,6 +8,8 @@ import Matches from "./pages/Matches";
 import SentMatches from "./pages/SentMatches";
 import JourneyPipelinePage from "./pages/JourneyPipelinePage";
 import Analytics from "./pages/Analytics";
+import Meetings from "./pages/Meetings";
+import AddCustomer from "./pages/AddCustomer";
 
 function App() {
   return (
@@ -46,6 +48,17 @@ function App() {
         path="/analytics"
         element={<Analytics />}
       />
+
+      <Route
+        path="/meetings"
+        element={<Meetings />}
+      />
+
+      <Route
+        path="/add-customer"
+        element={<AddCustomer />}
+      />
+
     </Routes>
 
 

@@ -6,6 +6,9 @@ function SentMatches() {
   const [sentMatches, setSentMatches] =
     useState([]);
 
+  const [searchTerm, setSearchTerm] =
+    useState("");
+
   useEffect(() => {
     const matches =
       JSON.parse(
@@ -35,10 +38,43 @@ function SentMatches() {
           Sent Matches
         </h1>
 
+
+        <input
+          type="text"
+          placeholder="Search customer or match..."
+          value={searchTerm}
+          onChange={(e) =>
+            setSearchTerm(
+              e.target.value
+            )
+          }
+          style={{
+            width: "400px",
+            padding: "12px",
+            marginBottom: "20px",
+            borderRadius: "10px",
+            border: "1px solid #d1d5db"
+          }}
+        />
+
         {sentMatches.length === 0 ? (
           <p>No matches sent yet.</p>
         ) : (
-          sentMatches.map(
+          sentMatches
+            .filter(
+              (match) =>
+                match.customerName
+                  .toLowerCase()
+                  .includes(
+                    searchTerm.toLowerCase()
+                  ) ||
+                match.matchName
+                  .toLowerCase()
+                  .includes(
+                    searchTerm.toLowerCase()
+                  )
+            )
+            .map(
             (match, index) => (
               <div
                 key={index}
@@ -113,35 +149,10 @@ function SentMatches() {
                 </p>
 
                 <p>
-                  Status:
-                  {" "}
-                  <select
-                    defaultValue={
-                      match.status
-                    }
-                    style={{
-                      padding:
-                        "8px",
-                      borderRadius:
-                        "8px"
-                    }}
-                  >
-                    <option>
-                      Match Sent
-                    </option>
-
-                    <option>
-                      Meeting Scheduled
-                    </option>
-
-                    <option>
-                      Relationship Progressing
-                    </option>
-
-                    <option>
-                      Success Story
-                    </option>
-                  </select>
+                  Status:{" "}
+                  <strong>
+                    {match.status}
+                  </strong>
                 </p>
 
                 <p>
@@ -174,6 +185,79 @@ function SentMatches() {
                       View Match
                     </button>
                   </Link>
+
+                  <button
+                    onClick={() => {
+
+                      const date =
+                        prompt(
+                          "Enter Meeting Date (DD/MM/YYYY)"
+                        );
+
+                      const time =
+                        prompt(
+                          "Enter Meeting Time"
+                        );
+
+                      const mode =
+                        prompt(
+                          "Meeting Mode (Online / Offline)"
+                        );
+
+                      const notes =
+                        prompt(
+                          "Meeting Notes"
+                        );
+
+                      const meetings =
+                        JSON.parse(
+                          localStorage.getItem(
+                            "meetings"
+                          )
+                        ) || [];
+
+                      meetings.push({
+
+                        customerId:
+                          match.customerId,
+
+                        customerName:
+                          match.customerName,
+
+                        matchId:
+                          match.matchId,
+
+                        matchName:
+                          match.matchName,
+
+                        date,
+
+                        time,
+
+                        mode,
+
+                        notes,
+
+                        status:
+                          "Meeting Scheduled"
+
+                      });
+
+                      localStorage.setItem(
+                        "meetings",
+                        JSON.stringify(
+                          meetings
+                        )
+                      );
+
+                      alert(
+                        "Meeting Scheduled Successfully"
+                      );
+
+                    }}
+                  >
+                    Schedule Meeting
+                  </button>
                 </div>
               </div>
             )

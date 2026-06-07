@@ -9,22 +9,85 @@ function CustomerDetail() {
 
   const [customer, setCustomer] = useState(null);
   const [notes, setNotes] = useState("");
+  const [journeyStatus, setJourneyStatus] =
+    useState("");
 
   useEffect(() => {
     fetchCustomer();
   }, []);
 
   const fetchCustomer = async () => {
-    try {
-      const response = await API.get(`/customers/${id}`);
-      setCustomer(response.data);
 
-      const savedNotes = localStorage.getItem(`notes-${response.data.id}`);
-      setNotes(savedNotes || response.data.notes);
-    } catch (error) {
-      console.error("Error fetching customer:", error);
+  try {
+
+    const response =
+      await API.get(
+        `/customers/${id}`
+      );
+
+    setCustomer(
+      response.data
+    );
+
+    const savedStatus =
+      localStorage.getItem(
+        `journeyStatus-${response.data.id}`
+      );
+
+    setJourneyStatus(
+      savedStatus ||
+      response.data.journeyStatus
+    );
+
+    const savedNotes =
+      localStorage.getItem(
+        `notes-${response.data.id}`
+      );
+
+    setNotes(
+      savedNotes ||
+      response.data.notes
+    );
+
+  } catch (error) {
+
+    const customCustomers =
+      JSON.parse(
+        localStorage.getItem(
+          "customCustomers"
+        )
+      ) || [];
+
+    const customCustomer =
+      customCustomers.find(
+        (customer) =>
+          customer.id === Number(id)
+      );
+
+    if (customCustomer) {
+
+      setCustomer(
+        customCustomer
+      );
+
+      setJourneyStatus(
+        customCustomer.journeyStatus
+      );
+
+      setNotes(
+        customCustomer.notes || ""
+      );
+
+    } else {
+
+      console.error(
+        "Customer not found"
+      );
+
     }
-  };
+
+  }
+};
 
   if (!customer) {
     return <h2>Loading...</h2>;
@@ -229,13 +292,79 @@ function CustomerDetail() {
             <div className="info-card">
               <h3>Journey Status</h3>
 
-              <span
-                className={`status-badge ${customer.journeyStatus
-                  .replace(/\s+/g, "-")
-                  .toLowerCase()}`}
+              <select
+                value={journeyStatus}
+                onChange={(e) => {
+
+                  setJourneyStatus(
+                    e.target.value
+                  );
+
+                  localStorage.setItem(
+                    `journeyStatus-${customer.id}`,
+                    e.target.value
+                  );
+
+                }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "10px"
+                }}
               >
-                {customer.journeyStatus}
-              </span>
+                <option>
+                  New Lead
+                </option>
+
+                <option>
+                  Verified
+                </option>
+
+                <option>
+                  Actively Matching
+                </option>
+
+                <option>
+                  Match Sent
+                </option>
+
+                <option>
+                  Meeting Scheduled
+                </option>
+
+                <option>
+                  Relationship Progressing
+                </option>
+
+                <option>
+                  Success Story
+                </option>
+              </select>
+
+              <br />
+              <br />
+
+              <button
+                onClick={() => {
+
+                  localStorage.setItem(
+                    `journeyStatus-${customer.id}`,
+                    journeyStatus
+                  );
+
+                  setCustomer({
+                    ...customer,
+                    journeyStatus
+                  });
+
+                  alert(
+                    "Journey Status Updated Successfully"
+                  );
+
+                }}
+              >
+                Save Status
+              </button>
             </div>
 
             <div className="info-card">

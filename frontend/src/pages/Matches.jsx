@@ -16,6 +16,9 @@ function Matches() {
   const [aiAnalysis, setAiAnalysis] =
     useState({});
 
+  const [aiIntro, setAiIntro] =
+    useState({});
+
   useEffect(() => {
     fetchCustomer();
     fetchMatches();
@@ -90,7 +93,41 @@ function Matches() {
 
       }
 
-    };    
+    }; 
+    
+  const generateMatchIntro =
+  async (match) => {
+
+    try {
+
+      const response =
+        await API.post(
+          "/matches/generate-intro",
+          {
+            customer,
+            match
+          }
+        );
+
+      setAiIntro(
+        (prev) => ({
+          ...prev,
+          [match.id]:
+            response.data.intro
+        })
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Failed to generate intro"
+      );
+
+    }
+
+  };
 
   if (!customer) {
     return <h2>Loading...</h2>;
@@ -251,6 +288,16 @@ function Matches() {
                   >
                     Generate AI Analysis
                   </button>
+
+                  <button
+                    onClick={() =>
+                      generateMatchIntro(
+                        match
+                      )
+                    }
+                  >
+                    Generate Match Intro
+                  </button>
                 </div>
 
 
@@ -327,14 +374,38 @@ function Matches() {
                     )
                   )}
                 </div>
+                  <h3>AI Insight</h3>
 
-                <h3>AI Insight</h3>
+                    <p>
+                      {aiAnalysis[match.id]
+                        ? aiAnalysis[match.id]
+                        : match.aiInsight}
+                    </p>
 
-                <p>
-                  {aiAnalysis[match.id]
-                    ? aiAnalysis[match.id]
-                    : match.aiInsight}
-                </p>
+                    {aiIntro[match.id] && (
+                      <>
+                        <h3
+                          style={{
+                            marginTop: "20px"
+                          }}
+                        >
+                          AI Email Introduction
+                        </h3>
+
+                        <div
+                          style={{
+                            background: "#f8fafc",
+                            padding: "15px",
+                            borderRadius: "12px",
+                            border: "1px solid #e2e8f0",
+                            whiteSpace: "pre-wrap"
+                          }}
+                        >
+                          {aiIntro[match.id]}
+                        </div>
+                      </>
+                    )}
+
               </div>
             )
           )}

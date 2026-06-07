@@ -17,7 +17,7 @@ async function generateMatchExplanation(
 
     const model =
       genAI.getGenerativeModel({
-        model: "gemini-1.5-flash"
+        model: "gemini-2.5-flash"
       });
 
     const prompt = `
@@ -46,7 +46,7 @@ Explain why they are a good match.
         prompt
       );
 
-    return result.response.text();
+    console.log(result.response.text());
 
   } catch (error) {
 
@@ -71,25 +71,36 @@ async function generateMatchIntro(
       });
 
     const prompt = `
-Write a warm and professional matrimonial introduction email.
+You are a professional relationship manager working for a premium Indian matchmaking company.
 
-Customer:
-${customer.firstName} ${customer.lastName}
+Create a personalized introduction email.
+
+Customer Profile:
+Name: ${customer.firstName} ${customer.lastName}
 Age: ${customer.age}
 Profession: ${customer.profession}
 City: ${customer.city}
+Religion: ${customer.religion}
 
-Match:
-${match.firstName} ${match.lastName}
+Recommended Match:
+Name: ${match.firstName} ${match.lastName}
 Age: ${match.age}
 Profession: ${match.profession}
 City: ${match.city}
+Religion: ${match.religion}
 
-Write 4-5 professional sentences.
+Write a professional email with:
 
-The tone should be respectful, warm and suitable for an Indian matchmaking company.
+1. Greeting
+2. Introduction of the recommended match
+3. Why they are compatible
+4. Shared values and strengths
+5. Positive closing
 
-Start directly with the introduction.
+Length: 150-200 words.
+
+Tone: Warm, professional, premium matchmaking service.
+Format as a real email.
 `;
 
     const result =
@@ -97,7 +108,7 @@ Start directly with the introduction.
         prompt
       );
 
-    return result.response.text();
+    console.log(result.response.text());
 
   } catch (error) {
 
